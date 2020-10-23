@@ -12,5 +12,5 @@ To run Query Engine:
 
 ```
 $hadoop jar <jar_name>.jar Query <path to output directory of indexer in HDFS> <query text> <number of most relevant docs> 
-Example: $hadoop jar project3.jar Query /indexer_output "Big data technologies" 5es" 5
+Example: $hadoop jar project3.jar Query /indexer_output "Big data technologies" 5
 ```
