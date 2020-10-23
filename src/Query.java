@@ -10,7 +10,7 @@ public class Query {
             System.out.println("ERROR: User guide\n" +
                     "$hadoop jar <jar_name>.jar Query <path to output directory of indexer in HDFS> " +
                     "<query text> <number of most relevant docs> \nExample: $hadoop jar project3.jar " +
-                    "Query /index \"by the way\" 2");
+                    "Query /indexer_output \"by the way\" 2");
             return;
         }
         String doc_contents = String.join("\n", Ranker.run(args[0], args[1], Integer.parseInt(args[2])));//saved in directory "query"
