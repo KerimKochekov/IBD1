@@ -8,31 +8,25 @@
 
 ## Report content
 - Introduction
-- Achieved Results
-- Details
+- Architecture details
 - Conclusion
 - User guide
 - References
 
 ## Introduction
-The goal of this project to understand and implement simple search engine on Hadoop cluster with MapReduce framework on HDFS. The implementation of project consists of 2 main engines: Indexer engine and Query engine. Indexer engine tends to operate huge amount of data in distributed way with MapReduce technique(Mapping, Shuffling, Reducing) in offline mode. And Query engine work to scan over all ready vectors and find most relevant documents by its relevance value. Here is the relevance value calculation for some doc_vector:<br>
+The goal of this project to understand and implement simple search engine on Hadoop cluster with MapReduce framework on HDFS. The implementation of project consists of 2 main engines: Indexer engine and Query engine. Indexer engine tends to operate huge amount of data in distributed way with MapReduce technique(Mapping, Shuffling, Reducing) in offline mode. And Query engine's work to scan over all ready vectors and find most relevant documents by its relevance value. Here is the relevance value calculation for some doc_vector:<br>
 ![](https://latex.codecogs.com/gif.latex?r%28q%2Cd%29%20%3D%20%5Csum_%7Bi%3D1%7D%5E%7B%7CV%7C%7D%20q_i%20%5Ccdot%20d_i) <br>
 , where ![](https://latex.codecogs.com/gif.latex?%7CV%7C) stands for the number of distinct words in query and ![](https://latex.codecogs.com/gif.latex?q_i) stands for occurence of word with id ![](https://latex.codecogs.com/gif.latex?i).
 
-## Achieved Results
-To begin with, we implemented the whole system and it runs successfully. Mostly, we followed all suggestions from the guide [1] regarding the algorithms and overall architecture. In the Appendix there is an instruction on how to run the Indexer and Query operations. The same instruction you could also find in our repository. Here are some points worth to mention:
-- **Architecture of the System** is very similar to what was presented in the guide (Fig. 1). 
-
+## Architecture details
+During my limited time as single member of team, I tried my hard to follow architecture same as required from us(Fig. 1). I Also included bunch of comments to inside of few classes, so you can refer to codes if you interested some part of engines or modules.
 <p align="center">
 <img src="https://user-images.githubusercontent.com/20341995/66276753-39942e00-e89e-11e9-8a9c-e15df9c7c97c.png" width="300" />
 </p>
-
 <p align="center"><i>Figure 1. The Search Engine Architecture</i></p>
 
-However, we would have edited this picture. Firstly, there was an important issue of reading a text corpus: we had to be able to read and parse a set of input files containing JSONs to get two structure formats (`docId -> docText` for Indexing Engine and `docId -> (docURL, docTitle)` for Ranker Engine). So, we implemented one more module called CorpusParser which uses MapReduce jobs to parse the corpus into two different outcomes. Secondly, we really did not encounter neccessity of a Vocabulary module so we directly passed outputs from the Word Enumaration and the Document Count to the Indexer. Thirdly, we almost joined the Query Vectorizer, the Relevance Analizator and the Content Extractor into one module because two of them had a basic structure and implementation, whereas only one used MapReduce.
-- **Relevance Function** is decided to be a simple one from the guide $$
-r(q,d) = \sum_{i: i\in d, i\in q} q_i \cdot d_i.$$ The main advantage of it is its simplicity and ease of implementation compared to BM25 [2]. Indeed, there was no need to complicate the system since the main goal is to explore usage of MapReduce.
-- **Text Parser**. We decided that it would be useful to implemented our own text parser instead of using a simple StringTokenizer. Though our parser is not much complicated, it is supposed to prevent some unwanted symbols and substrings to appear.
+Implemented few extra classes(located in include) to reside helpfull functions, which used by most of the classes, such as encoding/decpo 
+
 - **TextToMap and MapToText**. We encountered some issues with writing and reading of a document's TF/IDF weights. So, since we didn't manage to find any "native" solutions, we implemented our own methods to convert and decode the map data structure to/from a text.
 
 ## Conclusion
