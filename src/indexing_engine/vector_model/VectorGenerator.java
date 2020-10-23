@@ -11,6 +11,7 @@ import org.apache.hadoop.mapreduce.Job;
 public class VectorGenerator {
     public static Path run(Path input, Path WordEnumerationPath, Path DocumentCountPath, Path output) throws Exception {
         Configuration conf = new Configuration();
+        //save the Paths in Configuration
         conf.set("document.ids", WordEnumerationPath.toString());
         conf.set("document.counts", DocumentCountPath.toString());
 

@@ -1,8 +1,8 @@
 import ranking_engine.Ranker;
 
 import java.io.FileWriter;
-import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Query {
     public static void main(String[] args) throws Exception {
@@ -13,11 +13,11 @@ public class Query {
                     "Query /index \"by the way\" 2");
             return;
         }
-        String doc_contents = String.join("\n", Ranker.run(args[0], args[1], Integer.parseInt(args[2])));//query
+        String doc_contents = String.join("\n", Ranker.run(args[0], args[1], Integer.parseInt(args[2])));//saved in directory "query"
+        //Save found document contests' title and url in file QUERY(TIME).txt to avoid name collisions and to find easily
         LocalDateTime dateTime = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy_HH-mm-ss");
-        FileWriter fw = new FileWriter("query_" + dateTime.format(formatter) + ".txt");
-        fw.write("Most relevant " + args[2] + " documents for the query: \"" + args[1] + "\"" + doc_contents);
+        FileWriter fw = new FileWriter("QUERY(" + dateTime.format(DateTimeFormatter.ofPattern("HH:mm:ss_dd:MM:yyyy")) + ").txt");
+        fw.write("Most relevant " + args[2] + " documents for the query: \"" + args[1] + "\"\n" + doc_contents);
         fw.close();
     }
 }

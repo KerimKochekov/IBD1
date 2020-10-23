@@ -1,18 +1,18 @@
 package indexing_engine;
 
-import common.TextParser;
+import include.TextParser;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.mapreduce.lib.input.MultipleInputs;
-import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.lib.input.MultipleInputs;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -21,6 +21,7 @@ public class DocumentParser {
     public static class TextMapper extends Mapper<Object, Text, IntWritable, Text> {
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
             try {
+                //parse the JSON files with keys "id" and "text" during the Map process
                 JSONObject jb = new JSONObject(value.toString());
                 int id = jb.getInt("id");
                 String text = TextParser.parse(jb.getString("text"));
@@ -35,6 +36,7 @@ public class DocumentParser {
     public static class TitleUrlMapper extends Mapper<Object, Text, IntWritable, Text> {
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
             try {
+                //parse the JSON files with keys "id","title" and "url" during the Map process
                 JSONObject jb = new JSONObject(value.toString());
                 int id = jb.getInt("id");
                 String title = jb.getString("title");
@@ -50,6 +52,7 @@ public class DocumentParser {
     public static class DocumentReducer extends Reducer<IntWritable, Text, IntWritable, Text> {
         public void reduce(IntWritable key, Iterable<Text> texts, Context context)
                 throws IOException, InterruptedException {
+            //Write contents with same id to same value
             StringBuilder outputText = new StringBuilder();
             for (Text text : texts)
                 outputText.append(text.toString());
@@ -67,10 +70,12 @@ public class DocumentParser {
 
         if (parseMode == 0) {
             outputPath = new Path(outputDir, "texts");
+            //add multiple JSON input files
             for (FileStatus fsi : fs_ls)
                 MultipleInputs.addInputPath(job, fsi.getPath(), TextInputFormat.class, TextMapper.class);
         } else if (parseMode == 1) {
             outputPath = new Path(outputDir, "title_urls");
+            //add multiple JSON input files
             for (FileStatus fsi : fs_ls)
                 MultipleInputs.addInputPath(job, fsi.getPath(), TextInputFormat.class, TitleUrlMapper.class);
         } else

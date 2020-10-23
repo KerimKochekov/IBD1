@@ -12,9 +12,9 @@ import org.apache.hadoop.mapreduce.Reducer;
 
 public class WordEnumeration {
     public static class EnumerationReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
-        private static int id = 0;
+        private static int tmp = 0; //set unique id for each word during the Reduce process
         public void reduce(Text word, Iterable<IntWritable> values, Context context)
-        throws IOException, InterruptedException { context.write(word,new IntWritable(++id)); }
+        throws IOException, InterruptedException { context.write(word,new IntWritable(++tmp)); }
     }
     public static Path run(Path inputPath, Path outputDir) throws Exception {
         Job job = Job.getInstance(new Configuration(), "word_enumeration");

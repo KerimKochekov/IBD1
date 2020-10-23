@@ -10,8 +10,9 @@ public class RankerReducer extends Reducer<DoubleWritable, Text, DoubleWritable,
     @Override
     public void reduce(DoubleWritable key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
         ArrayList<String> docs = new ArrayList<>();
+        //If there is a chance that two documents have same relevance value, write all in same value with separator "~"
         for (Text val : values)
             docs.add(val.toString());
-        context.write(key, new Text(String.join("|", docs)));
+        context.write(key, new Text(String.join("~", docs)));
     }
 }

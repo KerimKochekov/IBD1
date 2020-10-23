@@ -13,6 +13,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 public class DocumentCount {
     public static class CounterReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
         public void reduce(Text word, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
+            //Same as WordCount, count the number of words and write to context in lexicographical order
             int occurrence = 0;
             for (IntWritable val : values)
                 occurrence += val.get();
