@@ -11,7 +11,7 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Reducer;
 
 public class DocumentCount {
-    public static class IDFReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
+    public static class CounterReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
         public void reduce(Text word, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
             int occurrence = 0;
             for (IntWritable val : values)
@@ -26,8 +26,8 @@ public class DocumentCount {
         Job job = Job.getInstance(conf, "document_count");
         job.setJarByClass(DocumentCount.class);
         job.setMapperClass(CounterMapper.class);
-        job.setCombinerClass(IDFReducer.class);
-        job.setReducerClass(IDFReducer.class);
+        job.setCombinerClass(CounterReducer.class);
+        job.setReducerClass(CounterReducer.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
 

@@ -17,8 +17,8 @@ public class VectorGeneratorMapper extends Mapper<Object, Text, IntWritable, Tex
     public void setup(Context context) throws IOException {
         Configuration conf = context.getConfiguration();
         FileSystem fs = FileSystem.get(conf);
-        EnumerationMap = MapStrConvert.hdfsDirStrInt2Map(fs, new Path(conf.get("document.ids")));
-        CountMap = MapStrConvert.hdfsDirStrInt2Map(fs, new Path(conf.get("document.counts")));
+        EnumerationMap = MapStrConvert.HDFS_SI2MAP(fs, new Path(conf.get("document.ids")));
+        CountMap = MapStrConvert.HDFS_SI2MAP(fs, new Path(conf.get("document.counts")));
     }
     @Override
     public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
@@ -27,9 +27,9 @@ public class VectorGeneratorMapper extends Mapper<Object, Text, IntWritable, Tex
         HashMap<String, Integer> document_map = document_text.getWords();
         for (String word : document_map.keySet()) {
             Integer word_id = EnumerationMap.get(word);
-            double word_idf = CountMap.get(word).doubleValue();
-            Double norm_count = document_map.get(word).doubleValue() / word_idf;
-            String pair = MapStrConvert.makeStringPair(word_id, norm_count);
+            double word_count = CountMap.get(word).doubleValue();
+            Double proportion = document_map.get(word).doubleValue() / word_count;
+            String pair = word_id.toString() + "=>" + proportion.toString();
             value.set(pair); context.write(doc_id, value);
         }
     }

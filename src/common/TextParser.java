@@ -28,7 +28,7 @@ public class TextParser {
         public String text;
         public Id_Text(Text value) {
             Pair<Integer, String> p = MapStrConvert.string2Pair(value.toString(),
-                    MapStrConvert.parseInt, MapStrConvert.parseString, MapStrConvert.FileKVSeparator);
+                    MapStrConvert.parseInt, MapStrConvert.parseString, "\t");
             docId = p.key;
             text = p.value;
         }
@@ -42,7 +42,7 @@ public class TextParser {
         public HashMap<Integer, Double> vector;
         public Id_Vector(Text value) {
             Pair<Integer, String> p = MapStrConvert.string2Pair(value.toString(),
-                    MapStrConvert.parseInt, MapStrConvert.parseString, MapStrConvert.FileKVSeparator);
+                    MapStrConvert.parseInt, MapStrConvert.parseString, "\t");
             docId = p.key;
             vector = MapStrConvert.string2Map(p.value, MapStrConvert.parseInt, MapStrConvert.parseDouble);
         }

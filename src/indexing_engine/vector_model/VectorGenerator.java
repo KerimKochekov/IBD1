@@ -9,9 +9,6 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 
 public class VectorGenerator {
-    static final String StringIDF = "indexer.idf";
-    static final String StringWords = "indexer.words";
-
     public static Path run(Path input, Path WordEnumerationPath, Path DocumentCountPath, Path output) throws Exception {
         Configuration conf = new Configuration();
         conf.set("document.ids", WordEnumerationPath.toString());
