@@ -11,7 +11,7 @@ public class Indexer {
         if (args.length != 2) {
             System.out.println("ERROR: User guide\n" +
                     "$hadoop jar <jar_name>.jar Indexer <path to input directory in HDFS> <path to output directory in HDFS>" +
-                    "\nExample: $hadoop jar project3.jar Indexer /data /indexer");
+                    "\nExample: $hadoop jar project3.jar Indexer /EnWikiSmall /indexer_output");
             return;
         }
         FileSystem fs = FileSystem.get(new Configuration());
