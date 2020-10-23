@@ -1,4 +1,4 @@
-# IBD1
+# Assignment №1. MapReduce. Simple Text Indexer
 
 # User guide
 To run Indexer Engine:
